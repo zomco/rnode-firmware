@@ -79,6 +79,11 @@
   #define DISP_ADDR 0x3C
   #define SCL_OLED 17
   #define SDA_OLED 18
+#elif BOARD_MODEL == BOARD_EORA_S3
+  #define DISP_RST -1
+  #define DISP_ADDR 0x3C
+  #define SCL_OLED 17
+  #define SDA_OLED 18
 #elif BOARD_MODEL == BOARD_TECHO
   SPIClass displaySPI = SPIClass(NRF_SPIM0, pin_disp_miso, pin_disp_sck, pin_disp_mosi);
   #define DISP_W 128
@@ -276,6 +281,8 @@ bool display_init() {
       digitalWrite(pin_display_en, HIGH);
     #elif BOARD_MODEL == BOARD_T3S3
       Wire.begin(SDA_OLED, SCL_OLED);
+    #elif BOARD_MODEL == BOARD_EORA_S3
+      Wire.begin(SDA_OLED, SCL_OLED);
     #elif BOARD_MODEL == BOARD_HELTEC32_V2
       Wire.begin(SDA_OLED, SCL_OLED);
     #elif BOARD_MODEL == BOARD_HELTEC32_V3
@@ -434,6 +441,9 @@ bool display_init() {
         #elif BOARD_MODEL == BOARD_TECHO
           disp_mode = DISP_MODE_PORTRAIT;
           display.setRotation(3);
+        #elif BOARD_MODEL == BOARD_EORA_S3
+          disp_mode = DISP_MODE_LANDSCAPE;
+          display.setRotation(0);
         #else
           disp_mode = DISP_MODE_PORTRAIT;
           display.setRotation(3);

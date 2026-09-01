@@ -129,7 +129,7 @@ void setup() {
     boot_seq();
   #endif
 
-  #if BOARD_MODEL != BOARD_RAK4631 && BOARD_MODEL != BOARD_HELTEC_T114 && BOARD_MODEL != BOARD_TECHO && BOARD_MODEL != BOARD_T3S3 && BOARD_MODEL != BOARD_TBEAM_S_V1 && BOARD_MODEL != BOARD_HELTEC32_V4
+  #if BOARD_MODEL != BOARD_RAK4631 && BOARD_MODEL != BOARD_HELTEC_T114 && BOARD_MODEL != BOARD_TECHO && BOARD_MODEL != BOARD_T3S3 && BOARD_MODEL != BOARD_TBEAM_S_V1 && BOARD_MODEL != BOARD_HELTEC32_V4 && BOARD_MODEL != BOARD_EORA_S3
     // Some boards need to wait until the hardware UART is set up before booting
     // the full firmware. In the case of the RAK4631 and Heltec T114, the line below will wait
     // until a serial connection is actually established with a master. Thus, it
@@ -193,8 +193,7 @@ void setup() {
       #endif
     #endif
 
-    #if BOARD_MODEL == BOARD_XIAO_S3
-      // Improve wakeup from sleep
+    #if BOARD_MODEL == BOARD_XIAO_S3 || BOARD_MODEL == BOARD_EORA_S3
       delay(300);
       LoRa->reset();
       delay(100);
@@ -1760,7 +1759,7 @@ void sleep_now() {
   #if HAS_SLEEP == true
     stopRadio(); // TODO: Check this on all platforms
     #if PLATFORM == PLATFORM_ESP32
-      #if BOARD_MODEL == BOARD_T3S3 || BOARD_MODEL == BOARD_XIAO_S3
+      #if BOARD_MODEL == BOARD_T3S3 || BOARD_MODEL == BOARD_XIAO_S3 || BOARD_MODEL == BOARD_EORA_S3
         #if HAS_DISPLAY
           display_intensity = 0;
           update_display(true);

@@ -70,6 +70,11 @@
   #define MODEL_DE            0xDE // Xiao ESP32S3 with Wio-SX1262 module, 433 MHz
   #define MODEL_DD            0xDD // Xiao ESP32S3 with Wio-SX1262 module, 868 MHz
 
+  #define PRODUCT_EORA_S3     0xEC
+  #define BOARD_EORA_S3       0x46 // Ebyte EoRa PI (EoRa-S3-400TB / 900TB)
+  #define MODEL_D7            0xD7 // EoRa-S3-400TB, 410-493 MHz with SX1268
+  #define MODEL_D8            0xD8 // EoRa-S3-900TB, 850-930 MHz with SX1262
+
   #define PRODUCT_T32_10      0xB2
   #define BOARD_LORA32_V1_0   0x39
   #define MODEL_BA            0xBA // LilyGO T3 v1.0, 433 MHz
@@ -143,6 +148,8 @@
     #if BOARD_MODEL == BOARD_RAK4631
       #define MODEM SX1262
     #elif BOARD_MODEL == BOARD_GENERIC_NRF52
+      #define MODEM SX1262
+    #elif BOARD_MODEL == BOARD_EORA_S3
       #define MODEM SX1262
     #else
       #define MODEM SX1276
@@ -672,6 +679,43 @@
           const int pin_led_tx = 43;
         #endif
       #endif
+
+    #elif BOARD_MODEL == BOARD_EORA_S3
+      #define IS_ESP32S3 true
+      #ifndef MODEM
+        #define MODEM SX1262
+      #endif
+      #define DIO2_AS_RF_SWITCH true
+      #define HAS_BUSY true
+
+      #define HAS_DISPLAY true
+      #define HAS_CONSOLE true
+      #define HAS_WIFI true
+      #define HAS_BLUETOOTH false
+      #define HAS_BLE true
+      #define HAS_PMU true
+      #define HAS_NP false
+      #define HAS_SD false
+      #define HAS_EEPROM true
+
+      #define HAS_INPUT true
+      #define HAS_SLEEP true
+      #define PIN_WAKEUP GPIO_NUM_0
+      #define WAKEUP_LEVEL 0
+      const int pin_btn_usr1 = 0;
+
+      const int pin_cs = 7;
+      const int pin_reset = 8;
+      const int pin_sclk = 5;
+      const int pin_mosi = 6;
+      const int pin_miso = 3;
+      const int pin_tcxo_enable = -1;
+      const int pin_dio = 33;
+      const int pin_busy = 34;
+
+      const int pin_adc = 1;
+      const int pin_led_rx = 37;
+      const int pin_led_tx = 37;
 
     #elif BOARD_MODEL == BOARD_XIAO_S3
       #define IS_ESP32S3 true
