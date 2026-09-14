@@ -71,6 +71,11 @@
   #define DISP_ADDR 0x3C
   #define SCL_OLED 14
   #define SDA_OLED 13
+#elif BOARD_MODEL == BOARD_FAKETEC || BOARD_MODEL == BOARD_XIAOWA
+  #define DISP_RST -1
+  #define DISP_ADDR 0x3C
+  #define SCL_OLED 11
+  #define SDA_OLED 36
 #elif BOARD_MODEL == BOARD_RNODE_NG_21
   #define DISP_RST -1
   #define DISP_ADDR 0x3C
@@ -330,6 +335,8 @@ bool display_init() {
       Wire.begin(SDA_OLED, SCL_OLED);
     #elif BOARD_MODEL == BOARD_XIAO_S3
       Wire.begin(SDA_OLED, SCL_OLED);
+    #elif BOARD_MODEL == BOARD_FAKETEC || BOARD_MODEL == BOARD_XIAOWA
+      Wire.begin(SDA_OLED, SCL_OLED);
     #endif
 
     #if HAS_EEPROM
@@ -433,6 +440,9 @@ bool display_init() {
           disp_mode = DISP_MODE_PORTRAIT;
           display.setRotation(1);
         #elif BOARD_MODEL == BOARD_RAK4631
+          disp_mode = DISP_MODE_LANDSCAPE;
+          display.setRotation(0);
+        #elif BOARD_MODEL == BOARD_FAKETEC || BOARD_MODEL == BOARD_XIAOWA
           disp_mode = DISP_MODE_LANDSCAPE;
           display.setRotation(0);
         #elif BOARD_MODEL == BOARD_TDECK

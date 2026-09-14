@@ -119,6 +119,16 @@
   #define MODEL_11            0x11 // RAK4631, 433 Mhz
   #define MODEL_12            0x12 // RAK4631, 868 Mhz
 
+  #define PRODUCT_FAKETEC     0x1A // fakeTec nRF52840 ProMicro
+  #define BOARD_FAKETEC       0x52
+  #define MODEL_18            0x18 // fakeTec, 868/915 MHz
+  #define MODEL_19            0x19 // fakeTec, 433 MHz
+
+  #define PRODUCT_XIAOWA      0x1B // xiaoWa nRF52840 ProMicro
+  #define BOARD_XIAOWA        0x53
+  #define MODEL_1C            0x1C // xiaoWa, 868/915 MHz
+  #define MODEL_1D            0x1D // xiaoWa, 433 MHz
+
   #define PRODUCT_HMBRW       0xF0
   #define BOARD_HMBRW         0x32
   #define BOARD_HUZZAH32      0x34
@@ -150,6 +160,8 @@
     #elif BOARD_MODEL == BOARD_GENERIC_NRF52
       #define MODEM SX1262
     #elif BOARD_MODEL == BOARD_EORA_S3
+      #define MODEM SX1262
+    #elif BOARD_MODEL == BOARD_FAKETEC || BOARD_MODEL == BOARD_XIAOWA
       #define MODEM SX1262
     #else
       #define MODEM SX1276
@@ -936,8 +948,56 @@
       const int DISPLAY_MISO = PIN_T114_TFT_MISO;
       const int DISPLAY_MOSI = PIN_T114_TFT_MOSI;
       const int DISPLAY_CLK = PIN_T114_TFT_SCK;
-      const int DISPLAY_BL_PIN = PIN_T114_TFT_BLGT;
-      const int DISPLAY_RST = PIN_T114_TFT_RST;
+       const int DISPLAY_BL_PIN = PIN_T114_TFT_BLGT;
+       const int DISPLAY_RST = PIN_T114_TFT_RST;
+
+    #elif BOARD_MODEL == BOARD_FAKETEC || BOARD_MODEL == BOARD_XIAOWA
+      #define _PINNUM(port, pin) ((port) * 32 + (pin))
+      #define MODEM SX1262
+      #define HAS_EEPROM false
+      #define HAS_DISPLAY true
+      #define HAS_BLUETOOTH false
+      #define HAS_BLE true
+      #define HAS_CONSOLE false
+      #define HAS_PMU true
+      #define HAS_NP false
+      #define HAS_SD false
+      #ifndef FAKETEC_XTAL
+        #define HAS_TCXO true
+      #endif
+      #define HAS_RF_SWITCH_RX_TX true
+      #define HAS_BUSY true
+      #define HAS_INPUT true
+      #define HAS_SLEEP true
+      #define DIO2_AS_RF_SWITCH true
+      #define CONFIG_UART_BUFFER_SIZE 6144
+      #define CONFIG_QUEUE_SIZE 6144
+      #define CONFIG_QUEUE_MAX_LENGTH 200
+      #define EEPROM_SIZE 296
+      #define EEPROM_OFFSET EEPROM_SIZE-EEPROM_RESERVED
+      #if BOARD_MODEL == BOARD_XIAOWA
+        #define BLE_MANUFACTURER "xiaoWa"
+        #define BLE_MODEL "xiaoWa"
+      #else
+        #define BLE_MANUFACTURER "fakeTec"
+        #define BLE_MODEL "fakeTec"
+      #endif
+
+      #define PIN_3V3_EN _PINNUM(0, 13)
+
+      const int pin_btn_usr1 = _PINNUM(1, 0);
+      const int pin_rxen = _PINNUM(0, 17);
+      const int pin_txen = -1;
+      const int pin_reset = _PINNUM(0, 9);
+      const int pin_cs = _PINNUM(1, 13);
+      const int pin_sclk = _PINNUM(1, 11);
+      const int pin_mosi = _PINNUM(1, 15);
+      const int pin_miso = _PINNUM(0, 2);
+      const int pin_busy = _PINNUM(0, 29);
+      const int pin_dio = _PINNUM(0, 10);
+      const int pin_led_rx = _PINNUM(0, 15);
+      const int pin_led_tx = _PINNUM(0, 15);
+      const int pin_tcxo_enable = -1;
 
     #else
       #error An unsupported nRF board was selected. Cannot compile RNode firmware.
